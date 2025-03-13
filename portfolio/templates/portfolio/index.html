@@ -1,0 +1,318 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>Mon portfolio</title>
+
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700"
+      rel="stylesheet"
+    />
+
+    <!-- Favicon
+    ================================================== -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'portfolio/images/img/apple-touch-icon.png' %}" />
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'portfolio/images/img/favicon.png' %}" />
+
+    <!-- Stylesheets
+    ================================================== -->
+    <!-- Bootstrap core CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'portfolio/css/style.css' %}" rel="stylesheet" />
+    <link href="{% static 'portfolio/css/responsive.css' %}" rel="stylesheet" />
+  </head>
+  <body>
+<header id="masthead" class="site-header" data-anchor-target=".hero"
+      data-top="background: rgba(255,255,255,0); padding: 30px 0; box-shadow: 0px 0px 20px 6px rgba(0, 0, 0, 0);"
+      data-top-bottom="background: rgba(255,255,255,1); padding: 10px 0; box-shadow: 0px 0px 20px 6px rgba(0, 0, 0, 0.2);">
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="{% static 'portfolio/images/img/logo.png' %}" alt="logo">
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="page-scroll nav-item"><a class="nav-link" href="#hero">Accueil</a></li>
+                    <li class="page-scroll nav-item"><a class="nav-link" href="#about">A propos</a></li>
+                    <li class="page-scroll nav-item"><a class="nav-link" href="#service">Service</a></li>
+                    <li class="page-scroll nav-item"><a class="nav-link" href="#portfolio">Portfolio</a></li>
+                    <li class="page-scroll nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                </ul>
+
+                <div class="d-flex">
+                    {% if request.user.is_authenticated %}
+                        <a href="{% url 'login' %}" class="btn btn-outline-primary mx-1">Profil</a>
+                        <a href="{% url 'deconnexion' %}" class="btn btn-outline-secondary mx-1">Déconnexion</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-outline-primary mx-1">Connexion</a>
+                        <a href="{% url 'inscription' %}" class="btn btn-outline-secondary mx-1">Inscription</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <!-- /#header -->
+
+    <div id="hero" class="hero">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <h1>{{userInfos.name}} </h1>
+            <div class="page-scroll">
+              <p class="job-title">{{userInfos.profession}} </p>
+              <a href="#contact" class="btn btn-fill">Me joindre</a>
+              <div class="clearfix visible-xxs"></div>
+              <a href="#portfolio" class="btn btn-border">Competences</a>
+            </div>
+          </div>
+
+          <div class="col-md-6 text-right">
+            {%if userInfos.image%}
+                <img style="height:100%; width:100%; " src="{{userInfos.image.url}}" alt="alex-vidal"/>
+            {%else%}
+                <img src="{% static 'portfolio/images/img/alex-vidal.png' %}" alt="alex-vidal"/>
+            {%endif%}
+            </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.hero -->
+
+    <main id="main" class="site-main">
+      <section id="about" class="site-section section-about text-center">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+              <h2>A propos</h2>
+              <img
+                src="{% static 'portfolio/images/img/lines.svg' %}" class="img-lines" alt="lines"
+              />
+              <p>
+                {{userInfos.about}}
+              </p>
+              <a href="{{userInfos.linkcv}}" class="btn btn-fill" target="_blank" download>
+                Telecharger mon cv
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- /.secton-about -->
+
+      <section class="site-section section-skills">
+        <div class="container">
+          <div class="text-center">
+            <h3>Mes Competences</h3>
+            <img
+              src="{% static 'portfolio/images/img/lines.svg' %}"
+              class="img-lines"
+              alt="lines"
+            />
+          </div>
+          <div class="row">
+            {%for competence in competences%}
+            <div class="col-md-4 my-4">
+              <div class="skill">
+                <h4>{{competence.title}}</h4>
+                <div class="progress">
+                  <div class="progress-bar" role="progressbar" data-transitiongoal="{{competence.progress}}">
+                    {{competence.progress}}
+                  </div>
+                  <!-- /.progress-bar -->
+                </div>
+                <!-- /.progress -->
+              </div>
+              </div>
+              {%empty%}
+                <p>vide</p>
+            {%endfor%}
+
+          </div>
+        </div>
+      </section>
+      <!-- /.secton-skills -->
+
+      <section id="service" class="site-section section-services overlay text-center" >
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <h3>Experiences</h3>
+              <img src="{% static 'portfolio/images/img/lines.svg' %}" class="img-lines" alt="lines"/>
+            </div>
+                 {%if experiences%}
+                 {%for experience in experiences%}
+                    <div class="col-sm-4">
+                    <div class="service">
+                        {%if experience.image%}
+                            <img src="{{experience.image.url}}" alt="Front End Developer" />
+                        {%else%}
+                            <img src="{% static 'portfolio/images/img/front-end.svg' %}" alt="Front End Developer" />
+                        {%endif%}
+                        <h4>{{experience.title}} </h4>
+                        <p>
+                         {{experience.description}}
+                        </p>
+                    </div>
+                    <!-- /.service -->
+                    </div>
+                    {%endfor%}
+                 {%endif%}
+          </div>
+        </div>
+      </section>
+      <!-- /.secton-services -->
+
+      <section id="portfolio" class="site-section section-portfolio">
+        <div class="container">
+          <div class="text-center">
+            <h3>Mes realisations</h3>
+            <img
+              src="{% static 'portfolio/images/img/lines.svg' %}"
+              class="img-lines"
+              alt="lines"
+            />
+          </div>
+          <div class="row">
+            {%for realisation in realisations%}
+            <div class="col-md-4 col-xs-6">
+              <div class="portfolio-item">
+                {%if realisation.image%}
+                    <img src="{{realisation.image.url}}" class="img-res" alt=""/>
+                {%else%}
+                    <img src="{% static 'portfolio/images/img/portfolio-1.jpg' %}" class="img-res" alt=""/>
+                {%endif%}
+                <div class="portfolio-item-info">
+                  <h4>{{realisation.title}} </h4>
+                  <a href="{{realisation.link}}" data-toggle="modal" data-target="#portfolioItem1"
+                    ><span class="glyphicon glyphicon-eye-open"></span
+                  ></a>
+                  <a href="#"><span class="glyphicon glyphicon-link"></span></a>
+                </div>
+                <!-- /.portfolio-item-info -->
+              </div>
+              <!-- /.portfolio-item -->
+            </div>
+            {%endfor%}
+          </div>
+        </div>
+      </section>
+      <!-- /.secton-portfolio -->
+
+      <section class="site-section section-counters text-center">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-4 col-xs-12">
+              <p class="counter start" data-to="10" data-speed="2000">0</p>
+              <h4>Annees d'experience</h4>
+            </div>
+            <div class="col-sm-4 col-xs-12">
+              <p class="counter start" data-to="120" data-speed="2000">0</p>
+              <h4>Projet realiser</h4>
+            </div>
+            <div class="col-sm-4 col-xs-12">
+              <p
+                id="infinity"
+                class="counter"
+                data-from="0"
+                data-to="1"
+                data-speed="1000"
+              >
+                0
+              </p>
+              <h4>Seconds on this site!<br />What are you waiting for?</h4>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- /.section-counters -->
+
+      <section id="contact" class="site-section section-form text-center">
+        <div class="container">
+          <h3>Contact</h3>
+          <img
+            src="{% static 'portfolio/images/img/lines.svg' %}"
+            class="img-lines"
+            alt="lines"
+          />
+          <form>
+            <div class="row">
+              <div class="col-sm-12">
+                <input type="text" name="name" class="form-control mt-x-0" placeholder="Object" required/>
+              </div>
+              <div class="col-sm-12">
+                <textarea name="message" id="mesaage" class="form-control" placeholder="Message" required></textarea>
+              </div>
+            </div>
+            <button href="#" class="btn btn-border" type="submit">
+              Me joindre <span class="glyphicon glyphicon-send"></span>
+            </button>
+          </form>
+        </div>
+      </section>
+      <!-- /.section-form -->
+    </main>
+    <!-- /#main -->
+
+    <footer id="colophon" class="site-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-4 col-xs-12">
+            <a class="icon facebook-bg" href="#"
+              ><i class="icon-facebook"></i
+            ></a>
+            <a class="icon twitter-bg" href="#"><i class="icon-twitter"></i></a>
+            <a class="icon gplus-bg" href="#"><i class="icon-linkedin"></i></a>
+            <a class="icon linkedin-bg" href="#"><i class="icon-gplus"></i></a>
+          </div>
+          <div class="col-sm-4 col-sm-offset-0 col-xs-6 col-xs-offset-3">
+            <p class="copyright">Challenge backend nimba hub</p>
+          </div>
+          <div class="col-sm-4 col-xs-3">
+            <div class="text-right page-scroll">
+              <a class="icon icon-up-bg" href="#hero"
+                ><i class="icon-up"></i
+              ></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- /#footer -->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <script src="{% static 'portfolio/js/skrollr.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-progressbar/0.9.0/bootstrap-progressbar.min.js"></script>
+    <script src="{% static 'portfolio/js/jquery.countTo.min.js' %}"></script>
+    <script src="{% static 'portfolio/js/script.js' %}"></script>
+
+<!-- Lien vers Bootstrap Bundle JS (inclut Popper.js) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+  </body>
+</html>

@@ -1,0 +1,58 @@
+{%extends 'account/base.html' %}
+{%block content%}
+<div class="container d-flex justify-content-center">
+    <div class="card"  style="width: 20rem; margin-top:8rem;">
+        <div class="icone" style="text-align: center; margin-top:10px;">
+            <i class="bi bi-person-fill"></i>
+        </div>
+        <div class="card-body">
+            <form action="" method="post">
+                {% if messages %}
+                    {% for message in messages %}
+                        <p class="alert alert-success">{{ message }}<p>
+                    {% endfor %}
+                {%endif%}
+                {% if form.errors %}
+                    {% for error in form.non_field_errors %}
+                        <p class="alert alert-danger">{{ error }}<p>
+                    {% endfor %}
+                    {%for error in form.errros%}
+                        <p class="alert alert-danger">{{ error }}<p>
+                    {%endfor%}
+                {%endif%}
+                {%csrf_token%}
+                <div class="first_name m-2">
+                    {{form.first_name.label_tag}}
+                    {{form.first_name}}
+                </div>
+                <div class="last_name m-2">
+                    {{form.last_name.label_tag}}
+                    {{form.last_name}}
+                </div>
+                <div class="email m-2">
+                    {{form.email.label_tag}}
+                    {{form.email}}
+                </div>
+                <div class="password1 m-2">
+                    {{form.password1.label_tag}}
+                    {{form.password1}}
+                </div>
+                <div class="password2 m-2">
+                    {{form.password2.label_tag}}
+                    {{form.password2}}
+                </div>
+                <div class="validator row m-2">
+                    <button type="submit" class="btn btn-success">Inscription</button>
+                </div>
+                <hr class="border border-primary border-1 opacity-50" style="width: 30%; margin:15px auto;">
+                <div class="forgot-password mx-3 row">
+                    <a href="{%url 'login'%}" class="btn btn-outline-primary"> Connexion</a>
+                </div>
+
+            </form>
+
+
+        </div>
+</div>
+</div>
+{%endblock%}

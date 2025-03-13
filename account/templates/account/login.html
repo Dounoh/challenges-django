@@ -1,0 +1,52 @@
+{%extends 'account/base.html' %}
+{%block content%}
+<div class="container d-flex justify-content-center">
+    <div class="card" style="width: 21rem; margin-top:8rem;">
+        <div class="icone " style="text-align: center; margin-top:10px;">
+            <i class="bi bi-box-arrow-in-right"></i>
+        </div>
+        <div class="card-body">
+             <form action="" method="post">
+                {% if messages %}
+                    {% for message in messages %}
+                        <p class="alert alert-success">{{ message }}<p>
+                    {% endfor %}
+                {%endif%}
+                {% if form.errors %}
+                    {% for error in form.non_field_errors %}
+                        <p class="alert alert-danger">{{ error }}<p>
+                    {% endfor %}
+                    {%for error in form.errros%}
+                        <p class="alert alert-danger">{{ error }}<p>
+                    {%endfor%}
+                {%endif%}
+                {%csrf_token%}
+                <div class="m-4">
+                    {{form.username.label_tag}}
+                    {{form.username}}
+                </div>
+
+                <div class="password m-4">
+                    {{form.password.label_tag}}
+                    {{form.password}}
+                </div>
+                <div class="validator row m-2">
+                    <button type="submit" class="btn btn-success">Connexion</button>
+                </div>
+                <hr class="border border-primary border-1 opacity-50" style="width: 30%; margin:15px auto;">
+            </form>
+           <div class="other-infos d-flex justify-content-center">
+                <div class="inscription mx-3">
+                    <a href="{%url 'inscription'%}" class="link-offset-2 link-underline link-underline-opacity-0"> Inscription</a>
+                </div>
+                <div class="forgot-password mx-3">
+                    <a href="{%url 'forgot_password'%}" class="link-offset-2 link-underline link-underline-opacity-0 text-danger"> Mot de pass oublier?</a>
+                </div>
+           </div>
+        </div>
+    </div>
+
+</div>
+
+
+{%endblock%}
