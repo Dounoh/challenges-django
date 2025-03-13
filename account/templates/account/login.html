@@ -1,0 +1,55 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h2 class="text-center mb-4">Connexion</h2>
+
+      <div class="login-container d-flex justify-content-center" style="width: 20rem; margin:0px auto;">
+        <form action="" method="post" class="border p-4 rounded shadow">
+          {% csrf_token %} 
+          {% if form.errors %}
+            <div class="alert alert-danger">
+              <ul>
+                {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %} 
+          {% for message in messages %}
+          <div class="alert alert-info">{{ message }}</div>
+          {% endfor %}
+
+          <div class="form-group mt-2">
+            {{ form.username.label_tag }}
+            <input type="text" name="username" class="form-control" required />
+            {% for error in form.username.errors %}
+            <div class="alert alert-danger">{{ error }}</div>
+            {% endfor %}
+          </div>
+
+          <div class="form-group mt-2">
+            {{ form.password.label_tag }}
+            <input type="password" name="password" class="form-control" required />
+            {% for error in form.password.errors %}
+            <div class="alert alert-danger">{{ error }}</div>
+            {% endfor %}
+          </div>
+
+          <div class="submit-button row">
+            <button type="submit" class="btn btn-primary btn-block col m-2">
+              Connexion
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="text-center mt-3">
+        <a href="{% url 'account:forgot_password' %}">Mot de passe oublié ?</a
+        ><br />
+        <a href="{% url 'account:register' %}">Inscription</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

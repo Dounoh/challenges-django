@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% include "navebar.html" %}
+    <style>
+        .text{
+            font-weight: bold;
+            font-size: 20px;
+        }
+    </style>
+    <div class="container card mt-5 " style="margin-bottom: 30px; background-color:rgb(242, 241, 238)">
+        <h2>Edition de mon Film</h2>
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-group my-2">
+                <label class="text" for="{{ form.title.id_for_label }}">Titre</label>
+                {{ form.title }}
+                {% for error in form.title.errors %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="form-group my-2">
+                <label class="text"  for="{{ form.synopsis.id_for_label }}">Synopsis</label>
+                {{ form.synopsis }}
+                {% for error in form.synopsis.errors %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="form-group my-2">
+                <label class="text"  for="{{ form.genre.id_for_label }}">Genre</label>
+                {{ form.genre }}
+                {% for error in form.genre.errors %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="form-group my-2">
+                <label class="text" for="{{ form.out_date.id_for_label }}">Date de sortie</label>
+                <input type="date" name="out_date" value="{{form.out_date.value|date:'Y-m-d' }}" class="form-control">
+                {% for error in form.out_date.errors %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="form-group my-2">
+                <label class="text"  for="{{ form.casting.id_for_label }}">Les acteurs</label>
+                {{ form.casting }}
+                {% for error in form.casting.errors %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="form-group my-2">
+                <label class="text"  for="{{ form.duree.id_for_label }}">Durée</label>
+                {{ form.duree }}
+                {% for error in form.duree.errors %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="form-group my-2">
+                <label class="text"  for="{{ form.image.id_for_label }}">Image du film</label>
+                {{ form.image }}
+                {% for error in form.image.errors %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="form-group my-2">
+                <label class="text"  for="{{ form.publie.id_for_label }}">Publier ce film? </label>
+                {{ form.publie }}
+                {% for error in form.publie.errors %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="row">
+                <button type="submit" class="btn btn-success m-3 col">Enregistrer</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

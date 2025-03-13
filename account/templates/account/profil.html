@@ -1,0 +1,187 @@
+{%extends 'base.html'%}
+
+{%block content%}
+{%include 'navebar.html'%}
+
+<div class="container mt-5">
+    <div class="row d-flex justify-content-center" style="margin: 100px auto 20px auto;">
+        <div class="col-md-7">
+
+            {% for message in messages %}
+                <p class="alert alert-info">{{ message }}</p>
+            {% endfor %}
+
+            <div class="card p-3 py-4">
+
+                <div class="text-center">
+                    <img src="{{user.profil.url}}" width="120" height="110" class="rounded-circle" title="cliquer pour agrandir" data-bs-toggle="modal" data-bs-target="#deleteModal{{ user.pk }}">
+                </div>
+                
+                <div class="text-center mt-3">
+                    <span class="bg-secondary p-1 px-4 rounded text-white">{{user.role}} </span>
+                    <h5 class="mt-2 mb-0">{{user.first_name}} {{user.last_name}} </h5>
+                    <span>{{user.email}} </span>
+                    
+                    <div class="px-4 m-2">
+                        <a href="{%url 'account:edit_profil' request.user.pk %}" class="btn btn-outline-primary">Modifier</a>
+                    </div>
+
+                    <div class="mes-films" style="max-height: 300px; overflow:scroll;">
+                        <h3>Mes publications</h3>
+                        {% if user.role == 'realisateur'%}
+                            {%for film in user.user.all%}
+                            <a href="{%url 'movie:film_detail' film.uid %}" style="text-decoration: none;" class="btn btn-outline-primary d-block my-1" >
+                                <div class="film d-flex" >
+                                        <div class="image">
+                                            <img src="{{film.image.url}}" width="40" height="40" class="rounded-circle " alt="">
+                                        </div>
+                                        <div class="title me-auto" style="font-size: 18px; margin-left:8px; text-transform:capitalize;">
+                                            {{film.title}}
+                                        </div>
+                                        <div class="date" style="font: 12px !important; color: rgb(149, 148, 148);">
+                                            {{film.out_date}}
+                                        </div>
+                                </div>
+                            </a>
+                            {%endfor%}
+                        {%endif%}
+                    </div>
+
+                    <div class="buttons mt-3">
+                        <a href="{%url 'account:deconnexion'%}" class="btn btn-outline-danger px-4">Deconnexion</a>
+                        <a href="" data-bs-toggle="modal" data-bs-target="#deleteModaldelete" class="btn btn-danger px-4 ms-3">Supprimer</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- le modal pour -->
+    <div class="modal fade" id="deleteModal{{ user.pk }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteModalLabel">{{user.first_name}} {{user.last_name}} </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <img src="{{user.profil.url}}" style="width: 100%; height:100%;" class="img-fluid" >
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin du modal  -->
+
+
+<!-- le modal suppression de mon compte -->
+<div class="modal fade" id="deleteModaldelete" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteModalLabel">{{user.first_name}} {{user.last_name}} </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                Etes vous sur de bien vouloir supprimer votre compte
+            </div>
+    
+            <div class="modal-footer">
+                <a href="{%url 'account:delete_account' %}" class="btn btn-outline-danger">Supprimer</a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin du modal de suppressin de mon compte -->
+
+<style>
+
+    body{
+    background:#eee;
+}
+
+.card{
+    border:none;
+
+    position:relative;
+    overflow:hidden;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.card:before{
+    
+    content:"";
+    position:absolute;
+    left:0;
+    top:0;
+    width:4px;
+    height:100%;
+    background-color:#E1BEE7;
+    transform:scaleY(1);
+    transition:all 0.5s;
+    transform-origin: bottom
+}
+
+.card:after{
+    
+    content:"";
+    position:absolute;
+    left:0;
+    top:0;
+    width:4px;
+    height:100%;
+    background-color:#8E24AA;
+    transform:scaleY(0);
+    transition:all 0.5s;
+    transform-origin: bottom
+}
+
+.card:hover::after{
+    transform:scaleY(1);
+}
+
+.fonts{
+    font-size:11px;
+}
+
+.social-list{
+    display:flex;
+    list-style:none;
+    justify-content:center;
+    padding:0;
+}
+
+.social-list li{
+    padding:10px;
+    color:#8E24AA;
+    font-size:19px;
+}
+
+.buttons button:nth-child(1){
+       border:1px solid #8E24AA !important;
+       color:#8E24AA;
+       height:40px;
+}
+
+.buttons button:nth-child(1):hover{
+       border:1px solid #8E24AA !important;
+       color:#fff;
+       height:40px;
+       background-color:#8E24AA;
+}
+
+.buttons button:nth-child(2){
+       border:1px solid #8E24AA !important;
+       background-color:#8E24AA;
+       color:#fff;
+        height:40px;
+}
+</style>
+
+
+{%endblock%}
+

@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+{% include 'navebar.html' %}
+
+<!-- début de la carrousel -->
+<div id="carouselExampleCaptions" class="carousel slide" >
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner" style=" width: 100%; max-height: 600px; min-height: 300px; margin-top:30px">
+        <div class="carousel-item active">
+            <img src="{% static 'movie/images/img1.jpg' %}" class="d-block w-100 img-fluid" alt="...">
+            <!-- <div class="carousel-caption d-none d-md-block">
+                <h5>First slide label</h5>
+                <p>Some representative placeholder content for the first slide.</p>
+            </div> -->
+        </div>
+        <div class="carousel-item">
+            <img src="{% static 'movie/images/img2.jpg' %}" class="d-block w-100 img-fluid" alt="...">
+            <!-- <div class="carousel-caption d-none d-md-block">
+                <h5>Second slide label</h5>
+                <p>Some representative placeholder content for the second slide.</p>
+            </div> -->
+        </div>
+        <div class="carousel-item">
+            <img src="{% static 'movie/images/img3.jpg' %}" class="d-block w-100" alt="...">
+            <!-- <div class="carousel-caption d-none d-md-block">
+                <h5>Third slide label</h5>
+                <p>Some representative placeholder content for the third slide.</p>
+            </div> -->
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+<!-- fin de la carrousel -->
+
+<!-- le debut de l'affichage des films et le filter -->
+<div class="container my-4">
+
+<!-- debut filter -->
+    <div class="container">
+        <div class="row justify-content-md-between align-items-md-center">
+            <div class="col-md-5 mb-5 mb-md-0">
+                <!-- Boutton pour le modal de filtre-->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Filtrer
+                </button>
+                <!-- End Boutton pour le modal de filtre-->
+            </div>
+            <!-- Fin de la Colonne -->
+
+            <div class="col-md-5 col-lg-4">
+                <form method="get">
+                    <!-- la partie recherche -->
+                    <div class="input-group">
+                        <input type="text" name="search" class="form-control" placeholder="Search articles" aria-label="Search articles">
+                        <button type="submit" class="btn btn-primary"><i class="bi-search"></i></button>
+                    </div>
+                    <!-- fin de la partie recherche -->
+                </form>
+            </div>
+            <!--fin de la colonne -->
+        </div>
+    <!-- fin de la ligne -->
+    </div>
+<!-- fin de filter  -->
+
+
+<!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Filter les elements affichers</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="get">
+                    <div class="modal-body">
+                        {{ filter.form.as_p }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" type="button" class="btn btn-primary">Filtrer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- fin du modal de filtre -->
+
+
+    <h2 class="mb-4 mt-4">Les films</h2>
+    <!-- le debut le la ligne pour l'affichage des films -->
+    <div class="row">
+        {% if films %}
+            {% for film in films %}
+            <!-- le container les card de film -->
+                <div class="col-md-3 mb-4">
+                    <div class="card movie-card h-100" style="background-color: #f5f5f5;">
+                        <!-- la div de l'image principale -->
+                        <div class="position-relative">
+                            <a href="{% url 'movie:film_detail' film.uid %}">
+                                <img src="{{ film.image.url }}" class="card-img-top" alt="{{ film.title }}">
+                            </a>
+                            <!-- div la moyenne -->
+                            <div class="rating-badge position-absolute">
+                                <span class="badge badge-danger" style="color:#db6930; font-size: 16px">
+                                    <i class="bi bi-graph-up"></i> 
+                                    {{ film.note_moyenne }}%
+                                </span>
+                            </div>
+                            <!-- fin de la div de la moyenne -->
+                        </div>
+                        <!-- fin de la div de l'image principale -->
+                       
+                        <!-- le body de la card film -->
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ film.title }}</h5>
+                            <p class="card-text">{{ film.synopsis|truncatewords:10 }}</p>
+                            <p class="card-meta">
+                                Genre: {{ film.genre }} <br>
+                                Date: {{ film.out_date }} <br>
+                                <span class="ml-2">Duree: {{ film.duree }}</span>
+                            </p>
+                            <!-- la partie reaction des likes et dislike -->
+                            <div class="mt-auto">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="{% url 'avis:like' film.uid %}" class="btn btn-outline-success" style="background-color: #db6930; color: white;">
+                                        {{ film.like_count }} <i class="bi bi-hand-thumbs-up"></i>
+                                    </a>
+                                    <a href="{% url 'avis:dislike' film.uid %}" class="btn btn-outline-secondary" style="background-color: #db6930; color: white;">
+                                        {{ film.dislike_count }} <i class="bi bi-hand-thumbs-down"></i>
+                                    </a>
+                                    <a href="{% url 'movie:film_detail' film.uid %}" class="btn btn-outline-dark">
+                                        <i class="bi bi-chat-square-dots"></i>
+                                    </a>
+                                </div>
+                            </div>
+                           <!-- fin de la partie reaction des likes et dislike -->
+                        </div>
+                        <!-- fin du body de la card -->
+                    </div>
+                </div>
+            <!-- fin de container card film -->
+            {% endfor %}
+
+
+            <!-- le debut de la pagination  -->
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a href="?page={{ page_obj.previous_page_number }}" class="page-link">Previous</a>
+                            </li>
+                        {% endif %}
+
+                        {% for page_num in page_obj.paginator.page_range %}
+                            <li class="page-item {% if page_obj.number == page_num %}active{% endif %}">
+                                <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                            </li>
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            <!-- la fin de la pagination -->
+        {% else %}
+            <p class="text-center">Aucun film trouvé.</p>
+        {% endif %}
+    </div>
+    <!-- fin de la ligne -->
+</div>
+
+
+<!-- Les messages -->
+{% if messages %}
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        {% for message in messages %}
+            <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000" data-bs-autohide="true">
+                <div class="toast-header">
+                    <strong class="me-auto">Information</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    {{ message }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+<!-- fin de l'affichage des message -->
+
+<style>
+    .movie-card {
+        border: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .movie-card:hover {
+        transform: translateY(-10px);
+    }
+
+    .rating-badge {
+        top: 10px;
+        left: 10px;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 8px;
+        padding: 5px 10px;
+        text-align: center;
+    }
+
+    .rating-badge span {
+        display: block;
+        font-weight: bold;
+    }
+
+    .card-meta {
+        color: #999;
+        font-size: 0.9rem;
+    }
+
+    .card-img-top {
+        object-fit: cover;
+        height: 350px;
+        width: 100%;
+    }
+
+    .card-body h5 {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .card-body .btn {
+        width: 32%;
+    }
+</style>
+
+{% endblock %}

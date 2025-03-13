@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+{% include "navebar.html" %}
+    <div class="container" style="margin-top: 100px;">
+        <h2>Mes publications</h2>
+        <div class="row">
+            {% for user_film in user_films %}
+                <div class="card row mb-3">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="{{ user_film.image.url }}" class="img-fluid rounded-start" style="height: 100%;" alt="{{ user_film.image.url }}">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ user_film.title }}</h5>
+                                <p class="card-text">{{ user_film.synopsis|truncatewords:30 }}</p>
+                                    <div class="action d-flex">
+                                        <div class="modification">
+                                            <a href="{% url 'user_edition:update_user_film' user_film.uid %}" class="btn btn-info m-0">Éditer</a>
+                                            <button class="btn btn-danger m-0" data-bs-toggle="modal" data-bs-target="#modal{{ user_film.uid }}">Supprimer</button>
+                                        </div>
+                                        
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal de suppression -->
+                <div class="modal fade" id="modal{{ user_film.uid }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Suppression</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Êtes-vous sûr de vouloir supprimer ce film de votre brouillon ?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                <a href="{% url 'user_edition:user_delete_film' user_film.uid %}" type="button" class="btn btn-danger">Supprimer</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Fin du modal de suppression -->
+
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

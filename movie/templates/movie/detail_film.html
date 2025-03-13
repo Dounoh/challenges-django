@@ -1,0 +1,242 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% include "navebar.html" %}
+
+<style>
+    .image-film {
+        position: relative;
+        width: 100%;
+        max-height: 600px; 
+        min-height: 300px;
+    }
+    .detail-float {
+        margin: 0 auto;
+        border-radius: 10px;
+        position: absolute;
+        bottom: -150px;
+        width: 90%; /* Définit la largeur à 80% */
+        left: 5%;  /* Centré sur l'écran */
+        padding: 20px; /* Optionnel pour ajouter de l'espace intérieur */
+        background-color: #ffffff; /* Fond blanc pour la carte */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Ombre légère */
+    }
+    .espace {
+        height: 100px;
+    }
+    .information {
+        display: flex;
+        color: #212529; /* Texte en noir pour une meilleure lisibilité */
+    }
+    .description {
+        width: 95%;
+        margin: 10px auto;
+        color: #a7a6a4; /* Gris pour la description */
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    }
+    .titles {
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        color: #1a73e8; /* Couleur bleu pour les titres */
+    }
+    .btn-warning {
+        background-color: #ffc107; /* Jaune pour le bouton "Critiquer" */
+        border: none; /* Pas de bordure */
+    }
+    .btn-outline-primary {
+        color: #1a73e8; /* Couleur du texte pour le bouton Modifier */
+        border-color: #1a73e8; /* Bordure bleu */
+    }
+    .btn-outline-danger {
+        color: #dc3545; /* Couleur du texte pour le bouton Supprimer */
+        border-color: #dc3545; /* Bordure rouge */
+    }
+</style>
+
+<div class=" bg-light" style="margin-top: 60px;">
+    <div class="film-image">
+        <img src="{{ film.image.url }}" alt="image film" title="{{ film.title }}" class="img-fluid image-film">
+        
+        <!-- la div flotante sur l'image -->
+        <div class="detail-float card">
+            <div class="information">
+                <div class="left me-auto">
+                    <h2 class="titles">{{ film.title }} {{ film.out_date }}</h2>
+                    <p>
+                        <i class="bi bi-award-fill"></i>
+                        <span>Acteurs:</span> {{film.casting}} 
+                    </p>
+                </div>
+                <div class="right">
+                    <p style="display: inline-block;">Moyenne: {{ film.note_moyenne }} </p>
+                    <button class="btn btn-warning" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="display: inline-block;" >
+                        <i class="bi bi-patch-plus"></i> 
+                        Critiquer
+                    </button>
+                    <!-- le modal de critique pour les films -->
+                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Critiquer ce film</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body d-flex justify-content-center">
+                                    <form action="{% url 'avis:critique' film.uid %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="critiques-form form-group" style="width: 20rem;">
+                                            <div class="title m-2">
+                                                {{form.title.label_tag}}
+                                                {{ form.title }}
+                                            </div>
+                                            <div class="description m-2">
+                                                {{form.description.label_tag}}
+                                                {{ form.description }}
+                                            </div>
+                                            <div class="note m-2">
+                                                {{ form.note }}
+                                            </div>
+                                            <div class="boutton-control row m-2">
+                                                <button class="btn btn-primary col">Critiquer</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- la fin du modal de critique -->
+
+                </div>
+            </div>
+            <hr>
+            <div class="avis-edition d-flex">
+                <div class="avis me-auto">
+                    <i class="bi bi-hand-thumbs-up"></i> Like: {{ film.like_count }}
+                    <i class="bi bi-hand-thumbs-down"></i> Dislike: {{ film.dislike_count }}
+                </div>
+                <!-- les boutton pour la modification et la suppression -->
+                <div class="edition d-flex">
+                    <!-- le boutton pour la Modification -->
+                     {%if request.user == film.user%}
+                        <a href="{%url 'movie:update_film' film.uid%}" class="btn btn-outline-primary me-2">
+                            <i class="bi bi-pencil"></i>
+                            Modifier
+                        </a>
+                        <!-- le boutton pour la suppression -->
+                        <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ film.pk }}">
+                            <i class="bi bi-trash3"></i>
+                            Supprimer
+                        </button>
+                    {%endif%}
+                    <!-- le modal pour la suppression du film -->
+                     <div class="modal fade" id="deleteModal{{ film.pk }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="deleteModalLabel">Suppression</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Êtes-vous sûr de vouloir supprimer cet film ?
+                                </div>
+                                <!-- debut du footer modal-->
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                    <form action="{%url 'movie:delete_film' film.uid%}" method="get">
+                                        {%csrf_token%}
+                                        <button type="submit" href="" class="btn btn-danger">Supprimer</button>
+                                    </form>
+                                </div>
+                                <!-- fin du footer modal-->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- fin du modal de suppression -->
+                </div>
+                <!-- les boutton pour la modification et la suppression -->
+            </div>
+        </div>
+        <!-- fin de la div flotante -->
+
+        <div class="espace"></div>
+
+        <div class="card description">
+            <div class="film-description">
+                <p class="description">{{ film.synopsis }}</p>
+            </div>
+
+            <!-- la section de critique -->
+            <div class="critique">
+                <h1 class="text-center">
+                    <hr style="width: 10%; display:inline-block;">
+                    <span class="titles">Les critiques</span>
+                    <hr style="width: 10%; display:inline-block;">
+                </h1>
+                <div class="row d-flex justify-content-center">
+                    {% for critique in critiques %}
+                        <div class="card m-2" style="width: 20rem;">
+                            <div class="card-body p-1">
+                                <div class="card-title">
+                                    <img src="{{ critique.user.profil.url }}" style="width: 60px; height: 60px; border-radius: 50%;" class="img-fluid">
+                                    <span style="font-weight: bold;">{{ critique.user.first_name }} {{ critique.user.last_name }}</span>
+                                </div>
+                                <div class="card-text">
+                                    <strong>{{ critique.title }}</strong><br>
+                                    <p>{{critique.description|truncatewords:8}} </p>
+                                    Note: {{ critique.note }}
+                                </div>
+                                <div class="action">
+                                    <div class="btn-action row">
+                                        <a href="{% url 'avis:detail_critique' critique.pk%}" class="btn btn-outline-secondary col p-2 m-1">Commenter</a>
+                                        {% if user.is_authenticated and request.user == critique.user %}
+                                            <a href="{% url 'avis:critique_update' critique.pk %}" class="btn btn-outline-secondary col p-2 m-1">Modifier</a>
+                                            <a href="" type="button" class="btn btn-outline-secondary col p-2 m-1" data-bs-toggle="modal" data-bs-target="#deleteModal{{ critique.pk }}">Supprimer</a>
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- Modal pour la suppression du critique -->
+                                    <div class="modal fade" id="deleteModal{{ critique.pk }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="deleteModalLabel">Suppression</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Êtes-vous sûr de vouloir supprimer cette critique ?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                                    <a href="{% url 'avis:delete_critique' critique.pk %}" class="btn btn-danger">Supprimer</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Les messages -->
+{% if messages %}
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        {% for message in messages %}
+            <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000" data-bs-autohide="true">
+                <div class="toast-header">
+                    <strong class="me-auto">Information</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    {{ message }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}

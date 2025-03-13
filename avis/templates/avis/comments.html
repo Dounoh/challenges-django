@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Critiques{% endblock %}
+
+{% block content %}
+{% include 'navebar.html' %}
+<div class="container card" style="width: 35rem; margin-top: 80px;">
+   <div class="comment">
+        <a href="" class="btn btn-info mt-2">Retour</a>
+         <h2 class="text-center">{{ critique.title }}</h2>
+   </div>
+
+    <div class="comments-section mt-4" style="height: 300px; overflow-y: auto;">
+        <h4>Commentaires :</h4>
+        {% for commentaire in commentaires %}
+            <div class="comment-card mx-2 my-2" style="background-color: #e6ecf4; border-radius: 12px;">
+                <div class="comment-card-header d-flex px-3">
+                    <img src="{{ commentaire.user.profil.url }}" alt="{{ commentaire.user.first_name }} {{ commentaire.user.last_name }}" class="profile-picture" style="border-radius: 50%; width: 40px; height: 40px;">
+                    <div class="comment-meta ms-2">
+                        <strong style="font-size: 20px;">{{ commentaire.user.first_name }} {{ commentaire.user.last_name }}</strong>
+                        <p>{{ commentaire.comment }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <button class="m-2 btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#deleteModal{{ commentaire.pk }}">Supprimer</button>
+                            <small class="text-muted" style="font-style: italic;">{{ commentaire.at_date }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- le modal pour la suppression du film -->
+                <div class="modal fade" id="deleteModal{{ commentaire.pk }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="deleteModalLabel">Suppression</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Êtes-vous sûr de vouloir supprimer ce commentaire ?
+                        </div>
+                        <!-- debut du footer modal-->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                            <a href="{% url 'avis:delete_commentaire' commentaire.pk critique.pk%} " class="btn btn-outline-danger">Supprimer</a>
+                        </div>
+                        <!-- fin du footer modal-->
+                    </div>
+                </div>
+            </div>
+            <!-- fin du modal de suppression -->
+
+
+        {% empty %}
+            <p>Aucun commentaire pour le moment.</p>
+        {% endfor %}
+    </div>
+
+    <form action="{% url 'avis:commentaire' critique.pk %}" method="post" class="mt-4">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="comment">Ajouter un commentaire :</label>
+            {{ form.comment }}
+        </div>
+
+        {% for error in form.comment.errors %}
+            <div class="alert alert-danger">{{ error }}</div>
+        {% endfor %}
+
+        <div class="row">
+            <button type="submit" class="btn btn-primary m-2 col">Commenter</button>
+        </div>
+    </form>
+</div>
+
+<!-- Les messages -->
+{% if messages %}
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        {% for message in messages %}
+            <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000" data-bs-autohide="true">
+                <div class="toast-header">
+                    <strong class="me-auto">Information</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    {{ message }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+<!-- fin de l'affichage des message -->
+
+
+<div class="separateur my-4"></div>
+{% endblock %}
