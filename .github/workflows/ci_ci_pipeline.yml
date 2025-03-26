@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Setup Python
         uses: actions/setup-python@v2
-        with:  # Correction du 'whit' vers 'with'
+        with: 
           python-version: "3.12"
 
       - name: Install dependencies
@@ -40,10 +40,10 @@ jobs:
         image: postgres:15.8
         ports:
           - 5432:5432
-      environment:  
-        POSTGRES_USER:movi_user 
-        POSTGRES_PASSWORD:movi_pass
-        POSTGRES_DB:tasmovie_dev 
+        env:  # Correction ici
+          POSTGRES_USER: movi_user
+          POSTGRES_PASSWORD: movi_pass
+          POSTGRES_DB: tasmovie_dev
 
     steps:
       - uses: actions/checkout@v2
