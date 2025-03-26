@@ -41,8 +41,8 @@ jobs:
         ports:
           - 5459:5432
         env:  # Correction ici
-          POSTGRES_USER: movi_user
-          POSTGRES_PASSWORD: movi_pass
+          POSTGRES_USER: movie_user
+          POSTGRES_PASSWORD: movie_pass
           POSTGRES_DB: tasmovie_dev
 
     steps:
