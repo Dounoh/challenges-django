@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgress:15.8
+    image: postgres:16.8-alpine3.20
     environment:
       - POSTGRESS_USER =movie_user
       - POSTGRESS_PASSWORD =movie_pass
