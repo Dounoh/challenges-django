@@ -9,25 +9,25 @@ on:
 
 jobs:
   check_syntaxe:
-    runs-on : ubuntu-latest
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: [3.12]
 
     steps:
       - uses: actions/checkout@v2
-      - name: setup python
-      - uses: actions/setup-python@v2
-        with:
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:  # Correction du 'whit' vers 'with'
           python-version: "3.12"
 
-      - name: install dependancise
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install flake8
           pip install -r requirements.txt
 
-      - name: test package flake8
+      - name: Test package flake8
         run: |
           flake8 . --exit-zero
 
@@ -38,23 +38,24 @@ jobs:
     services:
       db:
         image: postgres:15.8
-      environment:
-        - POSTGRES_USER=movi_user
-        - POSTGRES_PASSWORD=movi_pass
-      ports:
-        -5432:5432
+        ports:
+          - 5432:5432
+      environment:  # Correction de 'evironment' vers 'environment'
+        - POSTGRES_USER=movi_user  # Correction de 'POSTGRESS_USER' vers 'POSTGRES_USER'
+        - POSTGRES_PASSWORD=movi_pass  # Correction de 'POSTGRESS_PASSWORD' vers 'POSTGRES_PASSWORD'
 
     steps:
       - uses: actions/checkout@v2
-      - name: setup python
-      - uses: actions/setup-python@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
         with:
           python-version: "3.12"
 
-      - name: install dependances
+      - name: Install dependencies
         run: |
           pip install -r requirements.txt
-      - name: make teste
+
+      - name: Run tests
         run: |
           pytest --cov=conf --cov-report=term-missing
 
@@ -64,12 +65,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: login to docker
-      - env:
-          username: ${{ DOCKER_PASSWORD }}
-          password: ${{ DOCKER_USERNAME }}
-        run: docker login -u $username -p $password
-      - name: docker build image
-        run: docker build . -t dounoh0/movie:latest
-      - name: push image to docker hub
-        run: docker push dounoh0/movie:latest
+      - name: Login to Docker
+        env:
+          username: ${{ secrets.DOCKER_USERNAME }}  # Utilisation des secrets Docker
+          password: ${{ secrets.DOCKER_PASSWORD }}  # Utilisation des secrets Docker
+        run: |
+          docker login -u $username -p $password
+
+      - name: Docker build image
+        run: |
+          docker build . -t dounoh0/movie:latest
+
+      - name: Push image to Docker Hub
+        run: |
+          docker push dounoh0/movie:latest
