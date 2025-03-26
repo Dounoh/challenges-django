@@ -2,6 +2,5 @@ env
 db.sqlite3
 htmlcov
 *.sqlite3
-staticfiles
 .coverage
 .pytest_cache
