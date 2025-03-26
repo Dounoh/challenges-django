@@ -58,6 +58,7 @@ jobs:
 
       - name: Run tests
         run: |
+          cd script_data_base && docker up -d 
           pytest --cov=conf --cov-report=term-missing
 
   Build:
