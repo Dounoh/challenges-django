@@ -40,9 +40,9 @@ jobs:
         image: postgres:15.8
         ports:
           - 5432:5432
-      environment:  # Correction de 'evironment' vers 'environment'
-        - POSTGRES_USER=movi_user  # Correction de 'POSTGRESS_USER' vers 'POSTGRES_USER'
-        - POSTGRES_PASSWORD=movi_pass  # Correction de 'POSTGRESS_PASSWORD' vers 'POSTGRES_PASSWORD'
+      environment:  
+        POSTGRES_USER=movi_user 
+        POSTGRES_PASSWORD=movi_pass 
 
     steps:
       - uses: actions/checkout@v2
