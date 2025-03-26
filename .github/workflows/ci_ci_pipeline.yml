@@ -41,8 +41,9 @@ jobs:
         ports:
           - 5432:5432
       environment:  
-        POSTGRES_USER=movi_user 
-        POSTGRES_PASSWORD=movi_pass 
+        POSTGRES_USER:movi_user 
+        POSTGRES_PASSWORD:movi_pass
+        POSTGRES_DB:tasmovie_dev 
 
     steps:
       - uses: actions/checkout@v2
