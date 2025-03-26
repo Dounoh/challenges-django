@@ -97,6 +97,7 @@ DATABASES = {
         'NAME': 'movie_prod',
         'USER': 'movie_user',
         'PASSWORD': 'movie_pass',
+        'HOST': 'postgres',
         'PORT': 5459,
         'TEST': {
             'NAME': 'tasmovie_dev',
