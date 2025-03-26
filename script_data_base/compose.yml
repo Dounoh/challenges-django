@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgress:15.8
+    environment:
+      - POSTGRESS_USER =movie_user
+      - POSTGRESS_PASSWORD =movie_pass
+    ports:
+      - 5432:5432
+    volumes:
+      - pg_data_movie:/var/lib/postgresql/data
+      - /init_script:/docker-entrypoint-initdb.d
+
+volumes:
+  pg_data_movie:

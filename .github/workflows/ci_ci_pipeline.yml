@@ -1,0 +1,75 @@
+name: Pipeline_ci_cd_movie
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  check_syntaxe:
+    runs_one : ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.12]
+
+    steep:
+      - uses: actions/checkout@v2
+      - name: setup python
+      - uses: actions/setup-python@v2
+        whit:
+          python-version: "3.12"
+
+      - name: install dependancise
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8
+          pip install -r requirements.txt
+
+      - name: test package flake8
+        run: |
+          flake8 . --exit-zero
+
+  Test:
+    runs_one: ubuntu-latest
+    needs: check_syntaxe
+
+    services:
+      db:
+        image: postgress:15.8
+      evironment:
+        - POSTGRESS_USER=movi_user
+        - POSTGRESS_PASSWORD=movi_pass
+      ports:
+        -5432:5432
+
+    steep:
+      - uses: actions/checkout@v2
+      - name: setup python
+      - uses: actions/setup-python@v2
+        white:
+          python-version: "3.12"
+
+      - name: install dependances
+        run: |
+          pip install -r requirements.txt
+      - name: make teste
+        run: |
+          pytest --cov=conf --cov-report=term-missing
+
+  Build:
+    runs_one: ubuntu-latest
+    needs: [Test]
+
+    steep:
+      - uses: actions/checkout@v2
+      - name: login to docker
+      - env:
+          username: ${{ DOCKER_PASSWORD }}
+          password: ${{ DOCKER_USERNAME }}
+        run: docker login -u $username -p $password
+      - name: docker build image
+        run: docker build . -t dounoh0/movie:latest
+      - name: push image to docker hub
+        run: docker push dounoh0/movie:latest

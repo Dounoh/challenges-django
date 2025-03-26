@@ -1,11 +1,10 @@
 Bonjour {{ user.first_name }},
 
-Il semble que le lien d'activation que vous avez utilisé ait expiré. 
+Il semble que le lien d'activation que vous avez utilisé ait expiré.
 
 Pour recevoir un nouveau lien d'activation, veuillez cliquer ici : [Demander un nouveau lien](http://{{ domaine }}{% url 'account:resend_activation' email=user.email %}).
 
 Merci de votre compréhension et bienvenue sur notre plateforme !
 
-Cordialement,  
+Cordialement,
 L'équipe de [Votre Application]
-

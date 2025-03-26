@@ -1,11 +1,16 @@
+from __future__ import annotations
 
 import django_filters
-from .models import Film
 from django.db.models import Avg
 
+from .models import Film
+
+
 class FilmFilter(django_filters.FilterSet):
-    out_date = django_filters.DateFilter(field_name='out_date', lookup_expr='exact', label="Date de sortie")
-    note_moyenne = django_filters.NumberFilter(method='filter_note_moyenne', label="Note Moyenne")
+    out_date = django_filters.DateFilter(
+        field_name='out_date', lookup_expr='exact', label="Date de sortie")
+    note_moyenne = django_filters.NumberFilter(
+        method='filter_note_moyenne', label="Note Moyenne")
 
     class Meta:
         model = Film
@@ -19,4 +24,3 @@ class FilmFilter(django_filters.FilterSet):
 #     #     super().__init__(*args, **kwargs)
 #     #     # Créer une liste de choix pour le genre
 #     #     self.filters['out_date'].choices = [(out_date, out_date) for out_date in Film.objects.values_list('out_date', flat=True).distinct()]
-    

@@ -17,7 +17,7 @@
                                  <div class="modification d-flex">
                                     <a href="{% url 'user_edition:update_user_film' user_film.uid %}" class="btn btn-info mx-1">Éditer</a>
                                     <button class="btn btn-danger mx-1" data-bs-toggle="modal" data-bs-target="#modal{{ user_film.uid }}">Supprimer</button>
-                                
+
                                     {% if not user_film.accept_admin %}
                                     <p class="card-text position-absolute bottom-0 end-0 m-2">
                                         <small class="fst-italic text-warning">

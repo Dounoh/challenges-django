@@ -6,7 +6,7 @@
 
       <div class="login-container d-flex justify-content-center" style="width: 20rem; margin:0px auto;">
         <form action="" method="post" class="border p-4 rounded shadow">
-          {% csrf_token %} 
+          {% csrf_token %}
           {% if form.errors %}
             <div class="alert alert-danger">
               <ul>
@@ -15,7 +15,7 @@
                 {% endfor %}
               </ul>
             </div>
-          {% endif %} 
+          {% endif %}
           {% for message in messages %}
           <div class="alert alert-info">{{ message }}</div>
           {% endfor %}

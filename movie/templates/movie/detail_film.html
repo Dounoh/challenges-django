@@ -7,7 +7,7 @@
     .image-film {
         position: relative;
         width: 100%;
-        max-height: 600px; 
+        max-height: 600px;
         min-height: 300px;
     }
     .detail-float {
@@ -55,7 +55,7 @@
 <div class=" bg-light" style="margin-top: 60px;">
     <div class="film-image">
         <img src="{{ film.image.url }}" alt="image film" title="{{ film.title }}" class="img-fluid image-film">
-        
+
         <!-- la div flotante sur l'image -->
         <div class="detail-float card">
             <div class="information">
@@ -63,13 +63,13 @@
                     <h2 class="titles">{{ film.title }} {{ film.out_date }}</h2>
                     <p>
                         <i class="bi bi-award-fill"></i>
-                        <span>Acteurs:</span> {{film.casting}} 
+                        <span>Acteurs:</span> {{film.casting}}
                     </p>
                 </div>
                 <div class="right">
                     <p style="display: inline-block;">Moyenne: {{ film.note_moyenne }} </p>
                     <button class="btn btn-warning" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="display: inline-block;" >
-                        <i class="bi bi-patch-plus"></i> 
+                        <i class="bi bi-patch-plus"></i>
                         Critiquer
                     </button>
                     <!-- le modal de critique pour les films -->

@@ -16,7 +16,7 @@
       <div class="d-flex">
         {% if user.is_authenticated %}
           <div class="profil me-1">
-            <img src="{{ request.user.profil.url }}" width="40px" height="40px" style="border-radius: 260px;"> 
+            <img src="{{ request.user.profil.url }}" width="40px" height="40px" style="border-radius: 260px;">
             <a href="{%url 'account:profil'%}" style="color: white;"> {{ request.user.first_name }} {{ request.user.last_name }}</a>
           </div>
           <a class="btn btn-outline-light me-2" href="{% url 'account:deconnexion' %}">Déconnexion</a>

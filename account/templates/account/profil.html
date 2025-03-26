@@ -16,12 +16,12 @@
                 <div class="text-center">
                     <img src="{{user.profil.url}}" width="120" height="110" class="rounded-circle" title="cliquer pour agrandir" data-bs-toggle="modal" data-bs-target="#deleteModal{{ user.pk }}">
                 </div>
-                
+
                 <div class="text-center mt-3">
                     <span class="bg-secondary p-1 px-4 rounded text-white">{{user.role}} </span>
                     <h5 class="mt-2 mb-0">{{user.first_name}} {{user.last_name}} </h5>
                     <span>{{user.email}} </span>
-                    
+
                     <div class="px-4 m-2">
                         <a href="{%url 'account:edit_profil' request.user.pk %}" class="btn btn-outline-primary">Modifier</a>
                     </div>
@@ -87,7 +87,7 @@
             <div class="modal-body p-0">
                 Etes vous sur de bien vouloir supprimer votre compte
             </div>
-    
+
             <div class="modal-footer">
                 <a href="{%url 'account:delete_account' %}" class="btn btn-outline-danger">Supprimer</a>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
@@ -113,7 +113,7 @@
 }
 
 .card:before{
-    
+
     content:"";
     position:absolute;
     left:0;
@@ -127,7 +127,7 @@
 }
 
 .card:after{
-    
+
     content:"";
     position:absolute;
     left:0;
@@ -184,4 +184,3 @@
 
 
 {%endblock%}
-
