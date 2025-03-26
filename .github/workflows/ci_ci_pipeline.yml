@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: setup python
       - uses: actions/setup-python@v2
-        whit:
+        with:
           python-version: "3.12"
 
       - name: install dependancise
@@ -38,9 +38,9 @@ jobs:
     services:
       db:
         image: postgres:15.8
-      evironment:
-        - POSTGRESS_USER=movi_user
-        - POSTGRESS_PASSWORD=movi_pass
+      environment:
+        - POSTGRES_USER=movi_user
+        - POSTGRES_PASSWORD=movi_pass
       ports:
         -5432:5432
 
@@ -48,7 +48,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: setup python
       - uses: actions/setup-python@v2
-        whit:
+        with:
           python-version: "3.12"
 
       - name: install dependances
