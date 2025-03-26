@@ -58,7 +58,7 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest --cov=conf --cov-report=term-missing
+          pytest --cov --cov-report term-missing
 
   Build:
     runs-on: ubuntu-latest
