@@ -97,7 +97,6 @@ DATABASES = {
         'NAME': 'movie_prod',
         'USER': 'movie_user',
         'PASSWORD': 'movie_pass',
-        'HOST': '127.0.0.1',
         'PORT': 5459,
         'TEST': {
             'NAME': 'tasmovie_dev',
