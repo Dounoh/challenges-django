@@ -1,0 +1,36 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+    -  id: check-yaml
+    -  id: end-of-file-fixer
+    -  id: trailing-whitespace
+
+  - repo: https://github.com/hhatto/autopep8
+    rev: v2.3.2
+    hooks:
+    -   id: autopep8
+
+  - repo: https://github.com/PyCQA/flake8
+    rev: 7.1.2
+    hooks:
+    -   id: flake8
+
+  - repo: https://github.com/asottile/reorder-python-imports
+    rev: v3.14.0
+    hooks:
+    -   id: reorder-python-imports
+        exclude: ^(pre_commit/resources/|testing/resources/python3_hooks_repo/)
+        args: [--py39-plus, --add-import, 'from __future__ import annotations']
+
+  - repo: https://github.com/Lucas-C/pre-commit-hooks-safety
+    rev: v1.4.0
+    hooks:
+    -   id: python-safety-dependencies-check
+
+  # - repo:  https://github.com/PyCQA/bandit
+  #   rev: 1.8.3
+  #   hooks:
+  #   - id: bandit
+  #   args: ["-c pyproject.toml"]
+  #   additional_dependencies: ["toml"]
