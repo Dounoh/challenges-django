@@ -72,9 +72,6 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}  
         # run: |
         #   docker login -u $username -p $password
-        echo "Username: $username"
-        echo "Password: [HIDDEN]"
-
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Docker build image
