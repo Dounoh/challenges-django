@@ -7,7 +7,7 @@ COPY requirements.txt .
 
 RUN pip install upgrade pip && install -r requirements.txt
 
-COPY ..
+COPY . .
 EXPOSE 8080
 
 CMD ['uvicorn', 'conf.asgi:application', '--host', '0.0.0.', '--port', '8080']
