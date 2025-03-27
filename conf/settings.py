@@ -178,7 +178,6 @@ DOMAINE_URL = 'localhost:8000'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        # Utilisez votre customisation ici
         'account.authenticate.CustomJWTAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
