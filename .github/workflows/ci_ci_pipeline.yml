@@ -43,7 +43,7 @@ jobs:
         env:  # Correction ici
           POSTGRES_USER: movie_user
           POSTGRES_PASSWORD: movie_pass
-          POSTGRES_DB: tasmovie_dev
+          POSTGRES_DB: test_movie_dev
 
     steps:
       - uses: actions/checkout@v2

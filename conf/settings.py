@@ -97,10 +97,10 @@ DATABASES = {
         'NAME': 'movie_prod',
         'USER': 'movie_user',
         'PASSWORD': 'movie_pass',
-        'HOST': '127.0.0.1',
         'PORT': 5459,
+        'HOST': '127.0.0.1',
         'TEST': {
-            'NAME': 'tasmovie_dev',
+            'NAME': 'test_movie_dev',
         }
     }
 }
@@ -147,7 +147,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STORAGES = {
     # ...
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        # "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+         "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
 
