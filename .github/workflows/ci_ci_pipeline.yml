@@ -72,7 +72,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}  
         # run: |
         #   docker login -u $username -p $password
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+        run: echo "fode.dounoh.5@gmail.com" | docker login -u "1961Mamady" --password-stdin
 
       - name: Docker build image
         run: |
