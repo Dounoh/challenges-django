@@ -12,3 +12,47 @@ services:
 
 volumes:
   pg_data_movie:
+
+
+
+version: '3.8'  # Version de Docker Compose
+
+services:
+  traefik:
+    image: traefik:v2.10  # Utilisation de l'image officielle de Traefik v2.10
+    env_file:
+      - .env  # Charge les variables d'environnement depuis un fichier .env
+    ports:
+      - "80:80"   # Expose le port 80 (HTTP)
+      - "443:443" # Expose le port 443 (HTTPS)
+    labels:
+      - "traefik.enable=true"  # Active Traefik pour ce conteneur
+      - "traefik.docker.network=traefik-public"  # Définit le réseau à utiliser
+      - "traefik.constraint-label=traefik-public"  # Assure que ce service fonctionne sur le bon réseau
+      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"  # Redirection HTTP vers HTTPS
+      - "traefik.http.middlewares.https-redirect.redirectscheme.permanent=true" # Redirection permanente
+      - "traefik.http.middlewares.https-compress.compress=true" # Active la compression des requêtes
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro  # Permet à Traefik d'accéder aux conteneurs Docker
+      - traefik-public-certificates:/certificates  # Stocke les certificats SSL générés
+      - /var/log/traefik:/var/log  # Stocke les logs de Traefik
+    command:
+      - --providers.docker  # Active le provider Docker pour Traefik
+      - --providers.docker.exposedbydefault=false  # Exige une activation explicite des conteneurs
+      - --entrypoints.http.address=:80  # Définit l'entrypoint HTTP
+      - --entrypoints.https.address=:443  # Définit l'entrypoint HTTPS
+      - --certificatesresolvers.le.acme.email=dev.harouna@gmail.com  # Adresse email pour Let's Encrypt
+      - --certificatesresolvers.le.acme.tlschallenge=true  # Active le challenge TLS pour SSL
+      - --accesslog  # Active les logs des accès
+      - --log  # Active les logs de Traefik
+      - --accesslog.filePath=/var/log/access.log  # Définit l'emplacement du fichier de logs des accès
+      - --api  # Active l'API de Traefik
+    networks:
+      - traefik-public  # Associe le conteneur au réseau Traefik
+
+volumes:
+  traefik-public-certificates:  # Déclare un volume nommé pour stocker les certificats SSL
+
+networks:
+  traefik-public:
+    external: true  # Utilise un réseau Docker existant nommé "traefik-public"
