@@ -9,16 +9,22 @@ services:
       - .env
     restart: always
     labels:
-      - traefik.enable=true
-      - traefik.docker.network=traefik-public
-      - traefik.http.routers.app-http.rule=Host(`${DOMAIN?Variable not set}`)
-      - traefik.http.routers.app-http.entrypoints=http
-      - traefik.http.routers.app-http.middlewares=https-redirect
-      - traefik.http.routers.app-https.rule=Host(`${DOMAIN?Variable not set}`)
-      - traefik.http.routers.app-http.entrypoints=https
-      - traefik.http.routers.app-http.tls=true
-      - traefik.http.routers.app-http.tls.certresolver=le
-      - traefik.http.services.app.loadbalancer.server.port=8080
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-public"
+
+      # HTTP -> Redirection HTTPS
+      - "traefik.http.routers.app-http.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.routers.app-http.entrypoints=http"
+      - "traefik.http.routers.app-http.middlewares=https-redirect"
+
+      # HTTPS
+      - "traefik.http.routers.app-https.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.routers.app-https.entrypoints=https"
+      - "traefik.http.routers.app-https.tls=true"
+      - "traefik.http.routers.app-https.tls.certresolver=le"
+
+      # Service Backend (doit écouter sur 8080)
+      - "traefik.http.services.app.loadbalancer.server.port=8080"
     networks:
       - traefik-public
     volumes:
