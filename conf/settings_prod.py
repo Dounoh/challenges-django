@@ -1,4 +1,4 @@
-from settings import *
+from conf.settings import *
 import environ
 import os
 import dj_database_url
