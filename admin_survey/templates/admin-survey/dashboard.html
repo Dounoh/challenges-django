@@ -1,0 +1,94 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard des Sondages Amélioré</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+     <link rel="stylesheet" href="{% static 'admin-survey/css/styles.css'%}">
+</head>
+<body>
+    <div class="body">
+        <a href="{%url 'admin-survey:add' %}">sur le second page</a>
+        <a href="{%url 'admin-survey:create' %}">ajout de sondage</a>
+        
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Dashboard Sondage</h2>
+        <a href="#home"><i class="fas fa-home"></i> Accueil</a>
+        <a href="#stats"><i class="fas fa-chart-bar"></i> Statistiques</a>
+        <a href="#polls"><i class="fas fa-poll"></i> Sondages</a>
+        <a href="#settings"><i class="fas fa-cogs"></i> Paramètres</a>
+    </div>
+
+    <!-- Contenu Principal -->
+    <div class="main">
+        <div class="header">
+            <h1>Dashboard des Sondages</h1>
+        </div>
+
+        <!-- Statistiques Générales -->
+        <section id="stats" class="container">
+            <div class="card">
+                <h3>Total des Sondages</h3>
+                <p class="stat-number" id="totalPolls">45</p>
+            </div>
+            <div class="card">
+                <h3>Total des Votes</h3>
+                <p class="stat-number" id="totalVotes">1234</p>
+            </div>
+            <div class="card">
+                <h3>Nombre d'Utilisateurs</h3>
+                <p class="stat-number" id="totalUsers">350</p>
+            </div>
+        </section>
+
+        <!-- Graphiques (côte à côte) -->
+        <section id="charts" class="charts-section">
+            <div class="chart-container">
+                <h3>Votes par Sondage</h3>
+                <canvas id="pollVotesChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3>Participation des Utilisateurs</h3>
+                <canvas id="userParticipationChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Recherche et Table de Sondages Récents -->
+        <section id="polls" class="polls-table">
+            <div class="search-bar">
+                <input type="text" placeholder="Rechercher un sondage...">
+                <button>Rechercher</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Titre du Sondage</th>
+                        <th>Date de Création</th>
+                        <th>Votes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Sondage sur le climat</td>
+                        <td>2024-10-15</td>
+                        <td>120</td>
+                    </tr>
+                    <tr>
+                        <td>Sondage sur l'éducation</td>
+                        <td>2024-10-18</td>
+                        <td>300</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <!-- Intégration de Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{%static 'admin-survey/js/script.js' %}"></script>
+    </div>
+</body>
+</html>

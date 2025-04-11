@@ -1,0 +1,5 @@
+Bonjour {{user.first_name}} {{user.last_name}}
+Merci de vous avoir inscrit sur notre platform.
+veillez cliquer sur ce lien pour activer votre compte
+
+http://{{domaine}}{% url 'user:activation_account' uid=uid token=token %}
