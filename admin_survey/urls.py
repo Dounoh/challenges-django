@@ -1,9 +1,7 @@
 from django.urls import path
-from .views import index,index1,CreateSurveyView
+from .views import DashboardView
 
 app_name = 'admin-survey'
 urlpatterns = [
-    path('',index,name='dashbord'),
-    path('add/',CreateSurveyView.as_view(),name='add'),
-    path('create/',CreateSurveyView.as_view(),name='create'),
+    path('',DashboardView.as_view(),name='dashbord'),
 ]

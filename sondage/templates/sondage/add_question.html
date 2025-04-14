@@ -1,0 +1,129 @@
+{% extends "admin-survey/base.html" %}
+{% block content %}
+  
+<div class="container">
+    <h2 class="mt-4">Détails du Sondage</h2>
+
+    <!-- Détails du Sondage -->
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ survey.title_survey }}</h5>
+            <p class="card-text"><strong>Description :</strong> {{ survey.description }}</p>
+            <p class="card-text"><strong>Date de Début :</strong> {{ survey.start_date }}</p>
+            <p class="card-text"><strong>Date de Fin :</strong> {{ survey.end_date }}</p>
+         <!--   <p class="card-text"><strong>Créé par :</strong> {{ survey.creator.username }}</p>  -->
+        </div>
+    </div>
+
+    <!-- Questions du Sondage -->
+    <h3>Questions</h3>
+    <div class="card">
+        <div class="card-header">
+            <!-- le debut du modal de question -->
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#questionModal">
+                Ajouter une question
+            </button>
+            
+            <!-- Modal -->
+            <div class="modal fade" id="questionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Nouvelle question</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{% url 'sondage:create_question' survey.uid %}" method="post">
+                        <div class="modal-body">
+                            {% csrf_token %}
+                            {{questionform.as_p}}
+                        </div>
+
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Ajouter</button>
+                        </div>
+                    </form>
+                </div>
+                </div>
+            </div>
+            <!-- la fin du modal de question -->
+            
+        </div>
+        <div class="card-body">
+            <ul>
+               {% for question in questions %}
+                <div class="container">
+                    <div class="row">
+                        <div class="col  mx-auto">
+                            <li> <strong>{{question.title_question}} </strong>  </li>
+                            <p><i> {{question.choice}} </i></p>
+                        </div>
+                        <div class="col mx-auto">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#response">
+                                Ajouter une question
+                            </button>
+                        </div>            
+            
+                        <!-- Modal -->
+                        <div class="modal fade" id="response" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Nouvelle Reponse</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form action="{% url 'sondage:create_response' question.uid %}" method="post">
+                                    <div class="modal-body" id="parent">
+                                        {% csrf_token %}
+                                        {{response_form.as_p}}
+                                    </div>
+                                    <button type="button" class="btn btn-primary" id="add_question">Ajouter une question</button>
+                                    <div class="modal-footer">
+                                    <button type="submit " class="btn btn-primary">Ajouter</button>
+                                    </div>
+                                </form>
+                            </div>
+                            </div>
+                        </div>
+                        <!-- la fin du modal de question -->
+
+
+
+                    </div>
+                </div>
+            </ul>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<script>
+
+    document.getElementById('add_question').addEventListener('click', function()
+        {
+            const TOTAL_FORMS  = document.getElementById('id_response-TOTAL_FORMS');
+            index_total_forms = parseInt(TOTAL_FORMS.value) ;
+            parent = document.getElementById('parent');
+
+            const new_paragraph = document.createElement('p');
+            const input = document.createElement('input');
+            input.setAttribute('id',`id_response-${index_total_forms}-response`);
+            input.classList.add('form-control');
+
+            const label = document.createElement('label');
+            label.setAttribute('for', `id_response-${index_total_forms}-response`);
+            label.textContent = `question-${index_total_forms}`
+
+            new_paragraph.appendChild(label);
+            new_paragraph.appendChild(input);
+
+            parent.appendChild(new_paragraph);
+
+            TOTAL_FORMS.value = index_total_forms + 1;
+
+    })
+    
+
+</script>
+
+{% endblock %}

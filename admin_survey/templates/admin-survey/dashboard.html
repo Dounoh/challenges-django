@@ -1,94 +1,93 @@
-{% load static%}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard des Sondages Amélioré</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-     <link rel="stylesheet" href="{% static 'admin-survey/css/styles.css'%}">
-</head>
-<body>
-    <div class="body">
-        <a href="{%url 'admin-survey:add' %}">sur le second page</a>
-        <a href="{%url 'admin-survey:create' %}">ajout de sondage</a>
-        
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <h2>Dashboard Sondage</h2>
-        <a href="#home"><i class="fas fa-home"></i> Accueil</a>
-        <a href="#stats"><i class="fas fa-chart-bar"></i> Statistiques</a>
-        <a href="#polls"><i class="fas fa-poll"></i> Sondages</a>
-        <a href="#settings"><i class="fas fa-cogs"></i> Paramètres</a>
-    </div>
+{% extends "admin-survey/base.html" %}
+{% block content %}
+  
+<h1 class="mt-4">Dashboard des Sondages</h1>
+<div class="mb-3">
 
-    <!-- Contenu Principal -->
-    <div class="main">
-        <div class="header">
-            <h1>Dashboard des Sondages</h1>
+    <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Créer un sondage
+  </button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Creation de sondage</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
-        <!-- Statistiques Générales -->
-        <section id="stats" class="container">
-            <div class="card">
-                <h3>Total des Sondages</h3>
-                <p class="stat-number" id="totalPolls">45</p>
+        <form action=" {% url 'sondage:create_survey' %}" method="post">
+            <div class="modal-body">
+                {% csrf_token %}
+                {{form.as_p}}
             </div>
-            <div class="card">
-                <h3>Total des Votes</h3>
-                <p class="stat-number" id="totalVotes">1234</p>
-            </div>
-            <div class="card">
-                <h3>Nombre d'Utilisateurs</h3>
-                <p class="stat-number" id="totalUsers">350</p>
-            </div>
-        </section>
 
-        <!-- Graphiques (côte à côte) -->
-        <section id="charts" class="charts-section">
-            <div class="chart-container">
-                <h3>Votes par Sondage</h3>
-                <canvas id="pollVotesChart"></canvas>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            <button type="submit" class="btn btn-primary">Creer</button>
             </div>
-            <div class="chart-container">
-                <h3>Participation des Utilisateurs</h3>
-                <canvas id="userParticipationChart"></canvas>
-            </div>
-        </section>
-
-        <!-- Recherche et Table de Sondages Récents -->
-        <section id="polls" class="polls-table">
-            <div class="search-bar">
-                <input type="text" placeholder="Rechercher un sondage...">
-                <button>Rechercher</button>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Titre du Sondage</th>
-                        <th>Date de Création</th>
-                        <th>Votes</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Sondage sur le climat</td>
-                        <td>2024-10-15</td>
-                        <td>120</td>
-                    </tr>
-                    <tr>
-                        <td>Sondage sur l'éducation</td>
-                        <td>2024-10-18</td>
-                        <td>300</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
+        </form>
+      </div>
     </div>
+  </div>
 
-    <!-- Intégration de Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="{%static 'admin-survey/js/script.js' %}"></script>
+</div>
+
+<section id="stats" class="row">
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Total des Sondages</h5>
+                <p class="card-text" id="totalPolls">45</p>
+            </div>
+        </div>
     </div>
-</body>
-</html>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Total des Votes</h5>
+                <p class="card-text" id="totalVotes">1234</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Nombre d'Utilisateurs</h5>
+                <p class="card-text" id="totalUsers">350</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="polls" class="mt-4">
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Rechercher un sondage...">
+        <button class="btn btn-outline-secondary" type="button">Rechercher</button>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Titre du Sondage</th>
+                <th>Date de Création</th>
+                <th>Votes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for survey in surveys %}
+            <tr>
+                <td>  
+                    <a href=" {% url 'sondage:detail_survey' survey.uid %} "> {{survey.title_survey}}</a>
+                </td>
+
+                <td>2024-10-15</td>
+                <td>120</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+{% endblock %}
