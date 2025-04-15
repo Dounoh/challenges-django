@@ -2,16 +2,15 @@ from django.db import models
 from django.utils import timezone
 import uuid
 from django.utils.text import slugify
+from comone.models import Base, BaseAnsweres
 
 
 #Titre, description, date de début, date de fin, créateur (FK vers User).
-class Survey(models.Model):
-    uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+class Survey(Base):
     title_survey = models.CharField(max_length=100, verbose_name='Titre')
     description = models.TextField(max_length=400, verbose_name='Description')
     start_date = models.DateField(blank=False, null=False, verbose_name='Debut')
     end_date = models.DateField(blank=False, null=False, verbose_name='Fin')
-    create_at = models.DateField(auto_now_add=True)
     creator = models.ForeignKey('user.User',on_delete=models.CASCADE,related_name='creator')
     publish = models.BooleanField(default=False)
 
@@ -20,8 +19,7 @@ class Survey(models.Model):
 
 
 #Texte de la question, type de réponse (réponse unique, multiple ou texte), sondage (FK vers Survey)
-class Question(models.Model):
-    uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+class Question(Base):
     survey = models.ForeignKey(Survey,on_delete=models.CASCADE,related_name='questions')
     title_question = models.CharField(max_length=200, verbose_name='Titre')
     choice = models.ForeignKey('Choice', on_delete=models.PROTECT)
@@ -39,11 +37,9 @@ class Choice(models.Model):
         return self.choice
 
 
-class Proposed(models.Model):
-    uid = models.URLField(default=uuid.uuid4, unique=True, editable=False)
+class Proposed(Base):
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='question_proposed')
     response = models.CharField(max_length=200, null=False, blank=False)
-    create_at = models.DateField(auto_now_add=True)
 
 
 # Lien entre la question et la réponse donnée par un utilisateur, avec FK vers User et vers Survey.
@@ -56,17 +52,3 @@ class Response(models.Model):
     def __str__(self):
         return f"Response de {self.user} a {self.question}"
 
-#Réponse du participant à la question (soit choix, soit texte)
-# class Answers(models.Model):
-#     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-#     user = models.ForeignKey('user.User',on_delete=models.CASCADE,related_name='user')
-#     question = models.ForeignKey(Question,on_delete=models.CASCADE,related_name='question_answer')
-#     survey = models.ForeignKey(Survey,on_delete=models.CASCADE)
-#     avis_unique = 
-#     create_at = models.DateTimeField(auto_now_add=True)
-
-#     class Meta:
-#         unique_together = ('question','user')
-    
-#     def __str__(self):
-#         return f'{self.question.title} - {self.user.first_name}'

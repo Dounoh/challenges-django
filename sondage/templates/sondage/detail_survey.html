@@ -91,7 +91,7 @@
                         </td>
                     </tr>
 
-                                    <!-- Modal -->
+                <!-- Modal -->
                 <div class="modal fade" id="response-{{question.pk}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                     <div class="modal-content">
@@ -122,8 +122,9 @@
         </div>
     </div>
 </div>
-<script>
 
+
+<script>
     document.getElementById('add_question').addEventListener('click', function()
         {
             const TOTAL_FORMS  = document.getElementById('id_response-TOTAL_FORMS');
@@ -137,7 +138,7 @@
 
             const label = document.createElement('label');
             label.setAttribute('for', `id_response-${index_total_forms}-response`);
-            label.textContent = `question-${index_total_forms}`
+            label.textContent = `question-${index_total_forms}`;
 
             new_paragraph.appendChild(label);
             new_paragraph.appendChild(input);

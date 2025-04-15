@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.views.generic import ListView,DetailView
-
-from sondage.models import Question,Survey
+from django.shortcuts import get_object_or_404
+from sondage.models import Question,Survey,Proposed
+from django.views import View 
 
 class ListeSurveyView(ListView):
     model = Question
@@ -20,4 +21,19 @@ class DetailSurvey(DetailView):
     slug_url_kwarg = 'uid'
     slug_field = 'uid'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        survey = self.get_object()
+        question = survey.questions.all()
+        context['questions'] = question
+        return context
     
+def get_question(request,uid):
+    question = get_object_or_404(Question, uid=uid)
+    pass
+
+class AnswerQuestionView(View):
+    def post(resquest,uid,type):
+        question = question(resquest, uid)
+        if 'unique' == type:
+            pass

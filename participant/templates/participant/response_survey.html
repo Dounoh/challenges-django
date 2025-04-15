@@ -24,7 +24,58 @@
             
 
         </div>
-        <div class="card-body overflow-scroll" style="height: 60vh;">
+        <div class="card-body overflow-scroll" style="height: 90vh;">
+
+          <div class="accordion" id="accordionPanelsStayOpenExample">
+            {% for question in questions %}
+              <div class="accordion-item my-2">
+                <h2 class="accordion-header">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne-{{ question.pk }}" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne-{{ question.pk }}">
+                    {{ question.title_question }}
+                  </button>
+                </h2>
+                <div id="panelsStayOpen-collapseOne-{{ question.pk }}" class="accordion-collapse collapse show">
+                  <div class="accordion-body">
+                    {% if question.choice.choice == 'unique' %}
+                      <!-- Radio buttons pour choix unique -->
+                      <form action="">
+                      {% for propose in question.question_proposed.all %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="response_{{ question.pk }}" id="response_{{ propose.pk }}" value="{{ propose.response }}">
+                            <label class="form-check-label" for="response_{{ propose.pk }}">
+                            {{ propose.response }}
+                          </label>
+                        </div>
+                      {% endfor %}
+                      <button type="submit" class="btn btn-success mt-2"> Repondre </button>
+                    </form>
+          
+                    {% elif question.choice.choice == 'multiple' %}
+                      <!-- Checkboxes pour choix multiple -->
+                      {% for propose in question.question_proposed.all %}
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" name="response_{{ question.pk }}" id="response_{{ propose.pk }}" value="{{ propose.response }}">
+                          <label class="form-check-label" for="response_{{ propose.pk }}">
+                            {{ propose.response }}
+                          </label>
+                        </div>
+                      {% endfor %}
+                      <button type="submit" class="btn btn-success mt-2"> Repondre </button>
+          
+                    {% elif question.choice.choice == 'ouverte' %}
+                      <!-- Input text pour question ouverte -->
+                      <form action="">
+                        <input type="text" class="form-control" name="response_{{ question.pk }}" id="response_{{ question.pk }}" placeholder="Votre réponse...">
+                        <button type="submit" class="btn btn-success mt-2"> Repondre </button>
+                      </form>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+                   
+
         </div>
     </div>
 </div>
