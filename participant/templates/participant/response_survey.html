@@ -1,0 +1,31 @@
+{% extends "participant/base.html" %}
+{% block content %}
+  
+<div class="container mt-4">
+        <div class="left">
+            <h2 class="">Détails du Sondage</h2>
+        </div>
+
+    <!-- Détails du Sondage -->
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ survey.title_survey }}</h5>
+            <p class="card-text"><strong>Description : </strong> {{ survey.description }} </p>
+            <p class="card-text"><strong>Date de Début : </strong> {{ survey.start_date }} </p>
+            <p class="card-text"><strong>Date de Fin : </strong> {{ survey.end_date }} </p>
+            <p class="card-text"><strong>Créé par : </strong>  {{ survey.creator.first_name }}  {{ survey.creator.last_name }}</p>  
+        </div>
+    </div>
+
+    <!-- Questions du Sondage -->
+    <h3>Questions</h3>
+    <div class="card">
+        <div class="card-header">
+            
+
+        </div>
+        <div class="card-body overflow-scroll" style="height: 60vh;">
+        </div>
+    </div>
+</div>
+{% endblock %}

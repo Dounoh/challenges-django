@@ -1,0 +1,39 @@
+{% extends "participant/base.html" %}
+{% block content %}
+
+<div class="container">
+    <div class="card shadow-sm mx-auto" style="max-width: 700px;">
+        <div class="card-body">
+          {% for survey in surveys %}
+            <!-- Créateur -->
+            <div class="d-flex align-items-center mb-3">
+                <img src="" alt="Profil" class="rounded-circle" width="40" height="40">
+                {% with survey.creator as user%}
+                <h6 class="ms-3 mb-0"> {{user.first_name}} {{user.last_name}} </h6>
+                {% endwith %}
+            </div>
+
+            <hr>
+
+            <!-- Infos Sondage -->
+            <div class="text-center mb-4">
+                <h4 class="fw-bold"> {{survey.title_survey}} </h4>
+                <p class="text-muted"> {{survey.description}} </p>
+            </div>
+
+            <hr>
+
+            <div class="row mb-2">
+              <div class="col">Date de debut: {{survey.start_date}} </div>
+              <div class="col">Date de fin: {{survey.end_date}} </div>
+            </div>
+            <div class="d-grid">
+              <a href="{% url 'participant:detail_survey' survey.uid %}" class="btn btn-primary">Participer au sondage</a>
+            </div>
+
+          {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

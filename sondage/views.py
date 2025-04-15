@@ -11,12 +11,10 @@ from django.http import HttpResponse
 from .models import Survey, Question,Proposed
 from .forms import SurveyForm, QuestionForm, ProposedFromSet
 
-def index(request):
-    return render(request,'sondage/index.html')
 
 
 class SurveyDetailView(DetailView):
-    template_name = 'sondage/add_question.html'
+    template_name = 'sondage/detail_survey.html'
     context_object_name = 'survey'
     model = Survey
     slug_field = 'uid'
@@ -26,8 +24,10 @@ class SurveyDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['questionform'] = QuestionForm
         survey = self.get_object()
-        context['questions'] = Question.objects.filter(survey=survey)
+        question = Question.objects.filter(survey=survey)
+        context['questions'] = question
         context['response_form'] = ProposedFromSet(queryset=Proposed.objects.none(), prefix='response')
+        context['responses'] = None
         return context
     
 
@@ -48,7 +48,6 @@ class CreateSurveyView(CreateView):
 class CreateQuestion(CreateView):
     form_class = QuestionForm
     model = Question
-    template_name = ''
     context_object_name = 'form'
 
     def form_valid(self, form):
@@ -59,37 +58,19 @@ class CreateQuestion(CreateView):
         question.save()
         return redirect('sondage:detail_survey', uid=uid)
     
-# class CreateProposedView(CreateView):
-#     form_class = ProposedFromSet
-#     model = Proposed
-#     template_name = ''
-
-#     def form_valid(self, form):
-#         proposed = form.save(commit=False)
-#         uid = self.kwargs.get('uid')
-#         question = get_object_or_404(Question, uid=uid)
-#         proposed.question = question
-#         proposed.save()
-#         return redirect('sondage:detail_survey', uid=uid)
-    
 
 class CreateProposedView(View):
-    def get(self, request, uid):
-        formset = ProposedFromSet(queryset=Proposed.objects.none())
-        return render(request, 'sondage/proposed_form.html', {
-            'formset': formset,
-            'uid': uid,
-        })
-
-    def post(self, request, uid):
-        formset = ProposedFromSet(request.POST)
-        if formset.is_valid():
+    def post(self, request, uid,uid_question):
+        form = ProposedFromSet(request.POST, prefix='response')
+        if form.is_valid():
             question = get_object_or_404(Question, uid=uid)
-            for form in formset:
-                if form.cleaned_data:  # pour éviter les lignes vides
-                    proposed = form.save(commit=False)
-                    proposed.question = question
-                    proposed.save()
-            return redirect('sondage:detail_survey', uid=uid)
-        # Si le formulaire n’est pas valide, on le réaffiche
-        return HttpResponse('le formulaire invalide')
+            responses = form.save(commit=False)
+            for response in responses:
+                response.question = question
+                response.save()
+            messages.success(request,'Reponse ajouter avec success')
+            return redirect('sondage:detail_survey', uid=uid_question)
+        
+        messages.error(request, 'le formulaire est invalide')
+        return redirect('sondage:detail_survey', uid=uid_question)
+

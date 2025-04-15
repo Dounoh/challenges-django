@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 import uuid
+from django.utils.text import slugify
 
 
 #Titre, description, date de début, date de fin, créateur (FK vers User).
@@ -12,6 +13,7 @@ class Survey(models.Model):
     end_date = models.DateField(blank=False, null=False, verbose_name='Fin')
     create_at = models.DateField(auto_now_add=True)
     creator = models.ForeignKey('user.User',on_delete=models.CASCADE,related_name='creator')
+    publish = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -39,7 +41,7 @@ class Choice(models.Model):
 
 class Proposed(models.Model):
     uid = models.URLField(default=uuid.uuid4, unique=True, editable=False)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='question_proposed')
     response = models.CharField(max_length=200, null=False, blank=False)
     create_at = models.DateField(auto_now_add=True)
 

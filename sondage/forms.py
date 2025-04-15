@@ -31,7 +31,7 @@ class ProposedForm(forms.ModelForm):
             'response' : forms.TextInput(attrs={'class': 'form-control'})
         }
 
-ProposedFromSet = inlineformset_factory(Question, Proposed,  form= ProposedForm , extra=1)
+ProposedFromSet = modelformset_factory(Proposed,  form= ProposedForm , extra=1)
 
 # class ChoiseForm(forms.ModelForm):
 #     class Meta:
